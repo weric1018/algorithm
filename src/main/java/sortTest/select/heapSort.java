@@ -1,6 +1,7 @@
 package sortTest.select;
 
 import initDate.sortArraysDate;
+import sortTest.util.sortUtil;
 
 /**
  * Created by ytG on 2017/6/9.
@@ -40,22 +41,18 @@ public class heapSort {
 
     public void sort(){
 
+        int i=sortArrays.length-1;
 
+        for(;i>=0;i--) {
+            //建堆
+            buildMaxHeap(sortArrays,i);
 
+            //交换堆顶和最后一个元素
+            swap(sortArrays,0,i);
+        }
+        sortUtil.displayArrays(sortArrays);
+        }
 
-    }
-
-
-    private void buildMaxHeap(int[] date ,int lastIndex){
-
-        //从lastIndex 处节点（最后一个节点）的父节点开始
-
-
-
-
-
-
-    }
 
     /**
      * 堆 广度 层最多节点数  深度 层数
@@ -64,9 +61,49 @@ public class heapSort {
      * 如果一个节点序号为i  ,如果其有左节点 ，则左节点 = 2*i +1  ,如果其有右节点 ，则右节点 =2*i +2
      * i 如果在n层 则 i = 2^(n-1) -1 (n>0) i = n-1 层总节点数+1 -1 （首项序号为0，需-1） ，则i 的左子节点Li在n+1 层 Li = 2^n -1  =2^n -2 +1 = 2*2^(n-1)-2+1 = 2(2^(n-1)-1)+1 =2*i +1
      * k 的父节点 = k-1 /2 的取整数值
-     *
      */
+    private void buildMaxHeap(int[] data ,int lastIndex){
 
+        //从lastIndex 处节点（最后一个节点）的父节点开始
+        int i = (int)(lastIndex-1)/2 ;
+
+        for(;i>=0;i--){
+
+            // k 保存正在判断的节点
+           int k=i;
+
+            //如果当前k节点的子节点存在
+           while (k*2+1 <=lastIndex){
+
+               //k 节点的左子节点的索引
+               int biggerIndex=2*k+1;
+
+               //如果biggerIndex 小于lastIndex，即biggerIndex+1 代表的k 节点的右子节点存在
+               if(biggerIndex<lastIndex && data[biggerIndex+1]>data[biggerIndex]){
+
+                   //biggerIndex 总是记录较大子节点的索引
+                   biggerIndex++;
+               }
+
+               //如果k节点的值小于其较大的子节点的值
+               if(data[k]<data[biggerIndex]){
+                   //交换他们
+                   swap(data,k,biggerIndex);
+
+                   //将biggerIndex 赋予k，开始while 循环的下一次循环，重新保证k节点的值大于其左右子节点的值
+                   k=biggerIndex;
+               }else{
+                   break;
+               }
+           }
+        }
+    }
+
+    private  void swap(int[] data, int i, int j) {
+        int tmp=data[i];
+        data[i]=data[j];
+        data[j]=tmp;
+    }
 
     public static void main(String [] args){
         int lastIndex = 5;
